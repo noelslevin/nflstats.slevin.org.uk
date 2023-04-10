@@ -86,7 +86,7 @@ $homeotscore = NULL;
   $gamejson = $jsonarray['events'][$x];
 
   // Find which team is home/road
-  switch ($$gamejson['competitions'][0]['competitors'][0]['homeAway']) {
+  switch ($gamejson['competitions'][0]['competitors'][0]['homeAway']) {
     case "home":
       $hometeam = 0;
       $roadteam = 1;
@@ -112,13 +112,17 @@ $homeotscore = NULL;
   $roadteamid = $gamejson['competitions'][0]['competitors'][$roadteam]['team']['id'];
   $homescore = $gamejson['competitions'][0]['competitors'][$hometeam]['score'];
   $roadscore = $gamejson['competitions'][0]['competitors'][$roadteam]['score'];
-  if ($gamejson['competitions'][0]['situation']['isRedZone'] == 'true') {
-      $redzone = 1;
+  if (isset($gamejson['competitions'][0]['situation']['isRedZone'])) {
+	  if ($gamejson['competitions'][0]['situation']['isRedZone'] == 'true') {
+		  $redzone = 1;
+	  }
   }
   else {
       $redzone = 0;
   }
-  $possessionteam = $gamejson['competitions'][0]['situation']['possession'];
+  if (isset($gamejson['competitions'][0]['situation']['possession'])) {
+	$possessionteam = $gamejson['competitions'][0]['situation']['possession'];
+  }
   if ($possessionteam == $hometeamid) {
     $possessionteamname = $hometeamname;
   }
@@ -127,25 +131,31 @@ $homeotscore = NULL;
   }
   $gamestatus = $gamejson['status']['type']['detail'];
   $gamestate = $gamejson['status']['type']['state'];
-  $gamepassleader = $gamejson['competitions'][0]['leaders'][0]['leaders'][0]['athlete']['fullName'];
-  $gamepassleaderstats = $gamejson['competitions'][0]['leaders'][0]['leaders'][0]['displayValue'];
-  $gamerushleader = $gamejson['competitions'][0]['leaders'][1]['leaders'][0]['athlete']['fullName'];
-  $gamerushleaderstats = $gamejson['competitions'][0]['leaders'][1]['leaders'][0]['displayValue'];
-  $gamereceivingleader = $gamejson['competitions'][0]['leaders'][2]['leaders'][0]['athlete']['fullName'];
-  $gamereceivingleaderstats = $gamejson['competitions'][0]['leaders'][2]['leaders'][0]['displayValue'];
-  $gamedownanddistance = $gamejson['competitions'][0]['situation']['downDistanceText'];
+  if (isset($gamejson['competitions'][0]['leaders'])) {
+	$gamepassleader = $gamejson['competitions'][0]['leaders'][0]['leaders'][0]['athlete']['fullName'];
+	$gamepassleaderstats = $gamejson['competitions'][0]['leaders'][0]['leaders'][0]['displayValue'];
+	$gamerushleader = $gamejson['competitions'][0]['leaders'][1]['leaders'][0]['athlete']['fullName'];
+	$gamerushleaderstats = $gamejson['competitions'][0]['leaders'][1]['leaders'][0]['displayValue'];
+	$gamereceivingleader = $gamejson['competitions'][0]['leaders'][2]['leaders'][0]['athlete']['fullName'];
+	$gamereceivingleaderstats = $gamejson['competitions'][0]['leaders'][2]['leaders'][0]['displayValue'];  
+  }
+  if (isset($gamejson['competitions'][0]['situation'])) {
+	$gamedownanddistance = $gamejson['competitions'][0]['situation']['downDistanceText'];
+  }
   $roadq1score = $gamejson['competitions'][0]['competitors'][$roadteam]['linescores'][0]['value'];
   $roadq2score = $gamejson['competitions'][0]['competitors'][$roadteam]['linescores'][1]['value'];
   $roadq3score = $gamejson['competitions'][0]['competitors'][$roadteam]['linescores'][2]['value'];
   $roadq4score = $gamejson['competitions'][0]['competitors'][$roadteam]['linescores'][3]['value'];
-  $roadotscore = $gamejson['competitions'][0]['competitors'][$roadteam]['linescores'][4]['value'];
   $homeq1score = $gamejson['competitions'][0]['competitors'][$hometeam]['linescores'][0]['value'];
   $homeq2score = $gamejson['competitions'][0]['competitors'][$hometeam]['linescores'][1]['value'];
   $homeq3score = $gamejson['competitions'][0]['competitors'][$hometeam]['linescores'][2]['value'];
   $homeq4score = $gamejson['competitions'][0]['competitors'][$hometeam]['linescores'][3]['value'];
-  $homeotscore = $gamejson['competitions'][0]['competitors'][$hometeam]['linescores'][4]['value'];
   $hometeamrecord = $gamejson['competitions'][0]['competitors'][$hometeam]['records'][0]['summary'];
   $roadteamrecord = $gamejson['competitions'][0]['competitors'][$roadteam]['records'][0]['summary'];
+  if (isset($gamejson['competitions'][0]['competitors'][$roadteam]['linescores'][4]['value'])) {
+	$roadotscore = $gamejson['competitions'][0]['competitors'][$roadteam]['linescores'][4]['value'];
+	$homeotscore = $gamejson['competitions'][0]['competitors'][$hometeam]['linescores'][4]['value'];
+  }
 
 
 ?>
